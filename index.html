@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chess Learning Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Chess Learning Game</h1>
+  <p id="message" class="message">Choose a chess piece to learn how it moves!</p>
+  
+  <div class="piece-selection" id="pieceSelection">
+    <!-- Pieces will be added here with JavaScript -->
+  </div>
+  
+  <div class="game-mode">
+    <button id="learnMode" class="mode-button learn-button active">Learn Mode</button>
+    <button id="challengeMode" class="mode-button challenge-button">Challenge Mode</button>
+  </div>
+  
+  <div id="levelDisplay" class="level-display" style="display: none;">
+    <span id="levelText" class="level-text">Level: 1</span>
+    <div class="progress-bar">
+      <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+    </div>
+  </div>
+  
+  <div id="pawnLegend" class="legend" style="display: none;">
+    <div class="legend-item">
+      <div class="legend-color legend-green"></div>
+      <span>Move</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color legend-red"></div>
+      <span>Capture</span>
+    </div>
+  </div>
+  
+  <div id="chessboard" class="chessboard">
+    <!-- Chessboard will be created with JavaScript -->
+  </div>
+  
+  <div id="gameInstructions" class="game-instructions learn-instructions">
+    First, choose a chess piece to learn about!
+  </div>
+  <script type="text/javascript" src="script.js"></script>
+</body>
+</html>

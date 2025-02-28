@@ -1,0 +1,214 @@
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f9ff;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      color: #1d4ed8;
+      margin-bottom: 10px;
+    }
+
+    .message {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      text-align: center;
+      max-width: 600px;
+    }
+
+    .piece-selection {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .piece-button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px;
+      border-radius: 8px;
+      background-color: white;
+      border: 1px solid #d1d5db;
+      cursor: pointer;
+    }
+
+    .piece-button.selected {
+      background-color: #fef08a;
+      border: 2px solid #facc15;
+    }
+
+    .piece-image {
+      font-size: 40px;
+    }
+
+    .piece-name {
+      font-weight: bold;
+      margin-top: 4px;
+    }
+
+    .game-mode {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .mode-button {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+
+    .mode-button.active {
+      color: white;
+    }
+
+    .learn-button {
+      background-color: #e5e7eb;
+    }
+
+    .learn-button.active {
+      background-color: #3b82f6;
+    }
+
+    .challenge-button {
+      background-color: #e5e7eb;
+    }
+
+    .challenge-button.active {
+      background-color: #22c55e;
+    }
+
+    .level-display {
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .level-text {
+      font-weight: bold;
+      color: #7e22ce;
+    }
+
+    .progress-bar {
+      margin-top: 4px;
+      background-color: #e5e7eb;
+      height: 16px;
+      width: 144px;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      background-color: #8b5cf6;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .legend {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .legend-color {
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+    }
+
+    .legend-green {
+      background-color: #4ade80;
+    }
+
+    .legend-red {
+      background-color: #f87171;
+    }
+
+    .chessboard {
+      border: 4px solid #78350f;
+      width: 320px;
+      height: 320px;
+      margin-bottom: 16px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .board-row {
+      display: flex;
+      height: 40px;
+    }
+
+    .cell {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .white {
+      background-color: #fef3c7;
+    }
+
+    .black {
+      background-color: #92400e;
+    }
+
+    .highlighted {
+      background-color: #4ade80;
+    }
+
+    .capture {
+      background-color: #f87171;
+    }
+
+    .selected {
+      background-color: #60a5fa;
+    }
+
+    .piece-emoji {
+      font-size: 30px;
+    }
+
+    .game-instructions {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 16px;
+    }
+
+    .learn-instructions {
+      color: #1d4ed8;
+    }
+
+    .challenge-instructions {
+      color: #15803d;
+    }
+
+    .confetti {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-10px) rotate(0deg); }
+      100% { transform: translateY(300px) rotate(360deg); }
+    }
