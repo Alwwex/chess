@@ -1,31 +1,253 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chess Learning Game</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f9ff;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      color: #1d4ed8;
+      margin-bottom: 10px;
+    }
+
+    .message {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      text-align: center;
+      max-width: 600px;
+    }
+
+    .piece-selection {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .piece-button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px;
+      border-radius: 8px;
+      background-color: white;
+      border: 1px solid #d1d5db;
+      cursor: pointer;
+    }
+
+    .piece-button.selected {
+      background-color: #fef08a;
+      border: 2px solid #facc15;
+    }
+
+    .piece-image {
+      font-size: 40px;
+    }
+
+    .piece-name {
+      font-weight: bold;
+      margin-top: 4px;
+    }
+
+    .game-mode {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .mode-button {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+
+    .mode-button.active {
+      color: white;
+    }
+
+    .learn-button {
+      background-color: #e5e7eb;
+    }
+
+    .learn-button.active {
+      background-color: #3b82f6;
+    }
+
+    .challenge-button {
+      background-color: #e5e7eb;
+    }
+
+    .challenge-button.active {
+      background-color: #22c55e;
+    }
+
+    .level-display {
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .level-text {
+      font-weight: bold;
+      color: #7e22ce;
+    }
+
+    .progress-bar {
+      margin-top: 4px;
+      background-color: #e5e7eb;
+      height: 16px;
+      width: 144px;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      background-color: #8b5cf6;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .legend {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .legend-color {
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+    }
+
+    .legend-green {
+      background-color: #4ade80;
+    }
+
+    .legend-red {
+      background-color: #f87171;
+    }
+
+    .chessboard {
+      border: 4px solid #78350f;
+      width: 320px;
+      height: 320px;
+      margin-bottom: 16px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .board-row {
+      display: flex;
+      height: 40px;
+    }
+
+    .cell {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .white {
+      background-color: #fef3c7;
+    }
+
+    .black {
+      background-color: #92400e;
+    }
+
+    .highlighted {
+      background-color: #4ade80;
+    }
+
+    .capture {
+      background-color: #f87171;
+    }
+
+    .selected {
+      background-color: #60a5fa;
+    }
+
+    .piece-emoji {
+      font-size: 30px;
+    }
+
+    .game-instructions {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 16px;
+    }
+
+    .learn-instructions {
+      color: #1d4ed8;
+    }
+
+    .challenge-instructions {
+      color: #15803d;
+    }
+
+    .confetti {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-10px) rotate(0deg);
+      }
+
+      100% {
+        transform: translateY(300px) rotate(360deg);
+      }
+    }
+  </style>
 </head>
+
 <body>
   <h1>Chess Learning Game</h1>
   <p id="message" class="message">Choose a chess piece to learn how it moves!</p>
-  
+
   <div class="piece-selection" id="pieceSelection">
     <!-- Pieces will be added here with JavaScript -->
   </div>
-  
+
   <div class="game-mode">
     <button id="learnMode" class="mode-button learn-button active">Learn Mode</button>
     <button id="challengeMode" class="mode-button challenge-button">Challenge Mode</button>
   </div>
-  
+
   <div id="levelDisplay" class="level-display" style="display: none;">
     <span id="levelText" class="level-text">Level: 1</span>
     <div class="progress-bar">
       <div id="progressFill" class="progress-fill" style="width: 0%"></div>
     </div>
   </div>
-  
+
   <div id="pawnLegend" class="legend" style="display: none;">
     <div class="legend-item">
       <div class="legend-color legend-green"></div>
@@ -36,14 +258,846 @@
       <span>Capture</span>
     </div>
   </div>
-  
+
   <div id="chessboard" class="chessboard">
     <!-- Chessboard will be created with JavaScript -->
   </div>
-  
+
   <div id="gameInstructions" class="game-instructions learn-instructions">
     First, choose a chess piece to learn about!
   </div>
-  <script type="text/javascript" src="script.js"></script>
+  <script>
+    // Game state
+    const state = {
+      selectedPiece: null,
+      message: "Choose a chess piece to learn how it moves!",
+      highlightedSquares: [],
+      captureSquares: [],
+      selectedCell: null,
+      gameMode: 'learn', // 'learn' or 'challenge'
+      targetCell: null,
+      challengeLevel: 1,
+      successCount: 0,
+      showConfetti: false
+    };
+
+    // Chess pieces
+    const pieces = [
+      { name: 'Pawn', image: '♟️', description: 'Pawns move forward one square (or two on first move), but capture diagonally!' },
+      { name: 'Rook', image: '♜', description: 'Rooks move in straight lines - up, down, left, or right!' },
+      { name: 'Knight', image: '♞', description: 'Knights move in an L-shape and can jump over other pieces!' },
+      { name: 'Bishop', image: '♝', description: 'Bishops move diagonally across the board!' },
+      { name: 'Queen', image: '♛', description: 'Queens are powerful! They move in any direction - straight or diagonal!' },
+      { name: 'King', image: '♚', description: 'Kings can move one square in any direction. Protect your king!' }
+    ];
+
+    // DOM elements
+    const messageElement = document.getElementById('message');
+    const pieceSelectionElement = document.getElementById('pieceSelection');
+    const learnModeButton = document.getElementById('learnMode');
+    const challengeModeButton = document.getElementById('challengeMode');
+    const levelDisplayElement = document.getElementById('levelDisplay');
+    const levelTextElement = document.getElementById('levelText');
+    const progressFillElement = document.getElementById('progressFill');
+    const pawnLegendElement = document.getElementById('pawnLegend');
+    const chessboardElement = document.getElementById('chessboard');
+    const gameInstructionsElement = document.getElementById('gameInstructions');
+
+    // Initialize piece selection
+    function initPieceSelection() {
+      pieces.forEach(piece => {
+        const pieceButton = document.createElement('button');
+        pieceButton.className = 'piece-button';
+        pieceButton.innerHTML = `
+      <span class="piece-image">${piece.image}</span>
+      <span class="piece-name">${piece.name}</span>
+    `;
+        pieceButton.addEventListener('click', () => handlePieceSelect(piece));
+        pieceSelectionElement.appendChild(pieceButton);
+      });
+    }
+
+    // Initialize chessboard
+    function initChessboard() {
+      chessboardElement.innerHTML = '';
+      for (let row = 0; row < 8; row++) {
+        const rowElement = document.createElement('div');
+        rowElement.className = 'board-row';
+
+        for (let col = 0; col < 8; col++) {
+          const cellElement = document.createElement('div');
+          const isWhite = (row + col) % 2 === 0;
+          cellElement.className = `cell ${isWhite ? 'white' : 'black'}`;
+          cellElement.dataset.row = row;
+          cellElement.dataset.col = col;
+          cellElement.addEventListener('click', () => handleCellClick(row, col));
+          rowElement.appendChild(cellElement);
+        }
+
+        chessboardElement.appendChild(rowElement);
+      }
+    }
+
+    // Handle piece selection
+    function handlePieceSelect(piece) {
+      state.selectedPiece = piece;
+      state.message = `Great choice! This is the ${piece.name}. ${piece.description}`;
+      state.highlightedSquares = [];
+      state.captureSquares = [];
+      state.selectedCell = null;
+      state.targetCell = null;
+      state.gameMode = 'learn';
+
+      updateUI();
+    }
+
+    // Handle cell click
+    // Handle cell click
+    function handleCellClick(row, col) {
+      if (!state.selectedPiece) return;
+
+      if (state.gameMode === 'learn') {
+        // Clear previous highlights
+        state.highlightedSquares = [];
+        state.captureSquares = [];
+
+        // Set the selected cell
+        state.selectedCell = [row, col];
+
+        // Show valid moves based on the selected piece
+        const { normalMoves, captureMoves } = getValidMoves(state.selectedPiece.name, row, col);
+        state.highlightedSquares = normalMoves;
+        state.captureSquares = captureMoves;
+
+        state.message = `See how the ${state.selectedPiece.name} can move from this position!`;
+      } else if (state.gameMode === 'challenge') {
+        // Player is attempting to place their piece to capture the target
+        if (state.selectedCell && row === state.selectedCell[0] && col === state.selectedCell[1]) {
+          return; // Clicked on the same cell, do nothing
+        }
+
+        // Check if the move is valid
+        const { normalMoves, captureMoves } = getValidMoves(state.selectedPiece.name, state.selectedCell[0], state.selectedCell[1]);
+        const allValidMoves = [...normalMoves, ...captureMoves];
+        const isValidMove = allValidMoves.some(([r, c]) => r === row && c === col);
+
+        // Check if the target was hit
+        const hitTarget = state.targetCell && row === state.targetCell[0] && col === state.targetCell[1];
+
+        if (isValidMove && hitTarget) {
+          // Success! Target captured
+          showConfetti();
+
+          state.message = `Excellent job! You captured the king with your ${state.selectedPiece.name}!`;
+          state.successCount++;
+
+          // After a brief delay, set up next challenge
+          setTimeout(() => {
+            if (state.successCount >= 3) {
+              // Level up after 3 successes
+              state.challengeLevel++;
+              state.successCount = 0;
+              state.message = `Level up! Now you're on level ${state.challengeLevel}!`;
+            }
+            startNewChallenge();
+          }, 1500);
+        } else if (isValidMove) {
+          state.message = "That's a valid move, but you missed the king. Try again!";
+          state.selectedCell = [row, col];
+
+          // Keep the highlight visible in challenge mode level 1
+          if (state.challengeLevel === 1) {
+            const { normalMoves, captureMoves } = getValidMoves(state.selectedPiece.name, row, col);
+            state.highlightedSquares = normalMoves;
+            state.captureSquares = captureMoves;
+          } else {
+            state.highlightedSquares = [];
+            state.captureSquares = [];
+          }
+        } else {
+          state.message = `Oops! The ${state.selectedPiece.name} can't move like that. Try again!`;
+        }
+      }
+
+      updateUI();
+    }
+
+    // Update UI based on state
+    function updateUI() {
+      // Update message
+      messageElement.textContent = state.message;
+
+      // Update piece selection
+      const pieceButtons = document.querySelectorAll('.piece-button');
+      pieceButtons.forEach(button => {
+        const pieceName = button.querySelector('.piece-name').textContent;
+        if (state.selectedPiece && state.selectedPiece.name === pieceName) {
+          button.classList.add('selected');
+        } else {
+          button.classList.remove('selected');
+        }
+      });
+
+      // Update game mode buttons
+      if (state.gameMode === 'learn') {
+        learnModeButton.classList.add('active');
+        challengeModeButton.classList.remove('active');
+        levelDisplayElement.style.display = 'none';
+      } else {
+        learnModeButton.classList.remove('active');
+        challengeModeButton.classList.add('active');
+        levelDisplayElement.style.display = 'block';
+        levelTextElement.textContent = `Level: ${state.challengeLevel}`;
+        progressFillElement.style.width = `${(state.successCount / 3) * 100}%`;
+      }
+
+      // Update pawn legend visibility
+      if (state.selectedPiece && state.selectedPiece.name === 'Pawn' && state.gameMode === 'learn') {
+        pawnLegendElement.style.display = 'flex';
+      } else if (state.selectedPiece && state.selectedPiece.name === 'Pawn' && state.gameMode === 'challenge' && state.challengeLevel === 1) {
+        // Also show legend in challenge mode level 1 for pawns
+        pawnLegendElement.style.display = 'flex';
+      } else {
+        pawnLegendElement.style.display = 'none';
+      }
+
+      // Update chessboard
+      updateChessboard();
+
+      // Update game instructions
+      if (state.gameMode === 'learn') {
+        gameInstructionsElement.className = 'game-instructions learn-instructions';
+        gameInstructionsElement.textContent = state.selectedPiece
+          ? "Click on the board to place your piece and see how it moves!"
+          : "First, choose a chess piece to learn about!";
+      } else {
+        gameInstructionsElement.className = 'game-instructions challenge-instructions';
+        gameInstructionsElement.textContent = state.challengeLevel === 1
+          ? (state.selectedPiece?.name === 'Pawn'
+            ? "Green squares show where you can move, red squares show where you can capture. Get the king!"
+            : "Green squares show where you can move. Capture the king!")
+          : "Move your piece to capture the king!";
+      }
+    }
+
+    // Event listeners for game mode buttons
+    learnModeButton.addEventListener('click', () => {
+      state.gameMode = 'learn';
+
+      // Make sure we show the movement highlights if a piece is already selected
+      if (state.selectedCell && state.selectedPiece) {
+        const { normalMoves, captureMoves } = getValidMoves(state.selectedPiece.name, state.selectedCell[0], state.selectedCell[1]);
+        state.highlightedSquares = normalMoves;
+        state.captureSquares = captureMoves;
+      }
+
+      state.message = `Learning mode: See how the ${state.selectedPiece?.name || 'piece'} moves!`;
+      state.targetCell = null;
+      updateUI();
+    });
+
+    // Get valid moves based on piece type and position
+    // Get valid moves based on piece type and position
+    function getValidMoves(pieceName, row, col) {
+      const normalMoves = [];
+      const captureMoves = [];
+
+      switch (pieceName) {
+        case 'Pawn':
+          // Forward movement (with two-square first move option)
+          if (row > 0) normalMoves.push([row - 1, col]); // One square forward
+
+          // Two squares forward from starting position (second rank for white)
+          if (row === 6) normalMoves.push([row - 2, col]);
+
+          // Capture diagonally
+          if (row > 0 && col > 0) captureMoves.push([row - 1, col - 1]);
+          if (row > 0 && col < 7) captureMoves.push([row - 1, col + 1]);
+          break;
+
+        case 'Rook':
+          // Horizontal and vertical movement
+          // Left direction
+          for (let c = col - 1; c >= 0; c--) {
+            normalMoves.push([row, c]);
+          }
+          // Right direction
+          for (let c = col + 1; c < 8; c++) {
+            normalMoves.push([row, c]);
+          }
+          // Up direction
+          for (let r = row - 1; r >= 0; r--) {
+            normalMoves.push([r, col]);
+          }
+          // Down direction
+          for (let r = row + 1; r < 8; r++) {
+            normalMoves.push([r, col]);
+          }
+          break;
+
+        case 'Knight':
+          // L-shaped movement - Knights can jump over other pieces
+          const knightMoves = [
+            [row - 2, col - 1], [row - 2, col + 1],
+            [row - 1, col - 2], [row - 1, col + 2],
+            [row + 1, col - 2], [row + 1, col + 2],
+            [row + 2, col - 1], [row + 2, col + 1]
+          ];
+
+          knightMoves.forEach(([r, c]) => {
+            if (r >= 0 && r < 8 && c >= 0 && c < 8) {
+              normalMoves.push([r, c]);
+            }
+          });
+          break;
+
+        case 'Bishop':
+          // Diagonal movement
+          // Up-left diagonal
+          for (let i = 1; row - i >= 0 && col - i >= 0; i++) {
+            normalMoves.push([row - i, col - i]);
+          }
+          // Up-right diagonal
+          for (let i = 1; row - i >= 0 && col + i < 8; i++) {
+            normalMoves.push([row - i, col + i]);
+          }
+          // Down-left diagonal
+          for (let i = 1; row + i < 8 && col - i >= 0; i++) {
+            normalMoves.push([row + i, col - i]);
+          }
+          // Down-right diagonal
+          for (let i = 1; row + i < 8 && col + i < 8; i++) {
+            normalMoves.push([row + i, col + i]);
+          }
+          break;
+
+        case 'Queen':
+          // Combine Rook and Bishop movements
+          // Horizontal and vertical (rook moves)
+          // Left direction
+          for (let c = col - 1; c >= 0; c--) {
+            normalMoves.push([row, c]);
+          }
+          // Right direction
+          for (let c = col + 1; c < 8; c++) {
+            normalMoves.push([row, c]);
+          }
+          // Up direction
+          for (let r = row - 1; r >= 0; r--) {
+            normalMoves.push([r, col]);
+          }
+          // Down direction
+          for (let r = row + 1; r < 8; r++) {
+            normalMoves.push([r, col]);
+          }
+
+          // Diagonal (bishop moves)
+          // Up-left diagonal
+          for (let i = 1; row - i >= 0 && col - i >= 0; i++) {
+            normalMoves.push([row - i, col - i]);
+          }
+          // Up-right diagonal
+          for (let i = 1; row - i >= 0 && col + i < 8; i++) {
+            normalMoves.push([row - i, col + i]);
+          }
+          // Down-left diagonal
+          for (let i = 1; row + i < 8 && col - i >= 0; i++) {
+            normalMoves.push([row + i, col - i]);
+          }
+          // Down-right diagonal
+          for (let i = 1; row + i < 8 && col + i < 8; i++) {
+            normalMoves.push([row + i, col + i]);
+          }
+          break;
+
+        case 'King':
+          // One square in any direction
+          for (let r = Math.max(0, row - 1); r <= Math.min(7, row + 1); r++) {
+            for (let c = Math.max(0, col - 1); c <= Math.min(7, col + 1); c++) {
+              if (r !== row || c !== col) {
+                normalMoves.push([r, c]);
+              }
+            }
+          }
+          break;
+      }
+
+      return { normalMoves, captureMoves };
+    }
+
+    // Start challenge mode
+    function startChallenge() {
+      if (!state.selectedPiece) {
+        state.message = "First, select a chess piece for the challenge!";
+        updateUI();
+        return;
+      }
+
+      state.gameMode = 'challenge';
+      startNewChallenge();
+    }
+
+    // Start a new challenge
+    function startNewChallenge() {
+      // Place the piece at a random position
+      const startRow = Math.floor(Math.random() * 8);
+      const startCol = Math.floor(Math.random() * 8);
+      state.selectedCell = [startRow, startCol];
+
+      // Get valid moves from this position
+      const { normalMoves, captureMoves } = getValidMoves(state.selectedPiece.name, startRow, startCol);
+      const allMoves = [...normalMoves, ...captureMoves];
+
+      if (allMoves.length === 0) {
+        // If no valid moves, try again
+        startNewChallenge();
+        return;
+      }
+
+      // Increase difficulty with level
+      let targetIndex;
+      if (state.challengeLevel === 1) {
+        // Level 1: Target is a random valid move
+        targetIndex = Math.floor(Math.random() * allMoves.length);
+      } else if (state.challengeLevel === 2) {
+        // Level 2: Target is a more distant valid move
+        // Sort by distance and pick from the further half
+        const sortedMoves = [...allMoves].sort((a, b) => {
+          const distA = Math.abs(a[0] - startRow) + Math.abs(a[1] - startCol);
+          const distB = Math.abs(b[0] - startRow) + Math.abs(b[1] - startCol);
+          return distB - distA;
+        });
+        targetIndex = Math.floor(Math.random() * Math.min(3, sortedMoves.length));
+        if (sortedMoves.length > 0) {
+          state.targetCell = sortedMoves[targetIndex];
+        } else {
+          state.targetCell = allMoves[0];
+        }
+        state.highlightedSquares = [];
+        state.captureSquares = [];
+        state.message = `Level ${state.challengeLevel} Challenge: Move your ${state.selectedPiece.name} to capture the king!`;
+        updateUI();
+        return;
+      } else {
+        // Level 3+: No highlights shown, increasing difficulty
+        targetIndex = Math.floor(Math.random() * allMoves.length);
+      }
+
+      state.targetCell = allMoves[targetIndex];
+
+      // In Level 1, show all valid moves as hints
+      if (state.challengeLevel === 1) {
+        state.highlightedSquares = normalMoves;
+        state.captureSquares = captureMoves;
+      } else {
+        state.highlightedSquares = [];
+        state.captureSquares = [];
+      }
+
+      state.message = `Level ${state.challengeLevel} Challenge: Move your ${state.selectedPiece.name} to capture the king!`;
+      updateUI();
+    }
+
+    // Update UI based on state
+    function updateUI() {
+      // Update message
+      messageElement.textContent = state.message;
+
+      // Update piece selection
+      const pieceButtons = document.querySelectorAll('.piece-button');
+      pieceButtons.forEach(button => {
+        const pieceName = button.querySelector('.piece-name').textContent;
+        if (state.selectedPiece && state.selectedPiece.name === pieceName) {
+          button.classList.add('selected');
+        } else {
+          button.classList.remove('selected');
+        }
+      });
+
+      // Update game mode buttons
+      if (state.gameMode === 'learn') {
+        learnModeButton.classList.add('active');
+        challengeModeButton.classList.remove('active');
+        levelDisplayElement.style.display = 'none';
+      } else {
+        learnModeButton.classList.remove('active');
+        challengeModeButton.classList.add('active');
+        levelDisplayElement.style.display = 'block';
+        levelTextElement.textContent = `Level: ${state.challengeLevel}`;
+        progressFillElement.style.width = `${(state.successCount / 3) * 100}%`;
+      }
+
+      // Update pawn legend visibility
+      if (state.selectedPiece && state.selectedPiece.name === 'Pawn' && state.gameMode === 'learn') {
+        pawnLegendElement.style.display = 'flex';
+      } else {
+        pawnLegendElement.style.display = 'none';
+      }
+
+      // Update chessboard
+      updateChessboard();
+
+      // Update game instructions
+      if (state.gameMode === 'learn') {
+        gameInstructionsElement.className = 'game-instructions learn-instructions';
+        gameInstructionsElement.textContent = state.selectedPiece
+          ? "Click on the board to place your piece and see how it moves!"
+          : "First, choose a chess piece to learn about!";
+      } else {
+        gameInstructionsElement.className = 'game-instructions challenge-instructions';
+        gameInstructionsElement.textContent = state.challengeLevel === 1
+          ? (state.selectedPiece?.name === 'Pawn'
+            ? "Green squares show where you can move, red squares show where you can capture. Get the king!"
+            : "Green squares show where you can move. Capture the king!")
+          : "Move your piece to capture the king!";
+      }
+    }
+
+    // Update chessboard display
+    function updateChessboard() {
+      const cells = document.querySelectorAll('.cell');
+      cells.forEach(cell => {
+        const row = parseInt(cell.dataset.row);
+        const col = parseInt(cell.dataset.col);
+        const isWhite = (row + col) % 2 === 0;
+
+        // Reset cell classes
+        cell.className = `cell ${isWhite ? 'white' : 'black'}`;
+        cell.innerHTML = '';
+
+        // Add highlight if needed
+        if (isHighlighted(row, col)) {
+          cell.classList.add('highlighted');
+        }
+
+        // Add capture highlight if needed
+        if (isCapture(row, col)) {
+          cell.classList.add('capture');
+        }
+
+        // Add selected style if needed
+        if (isSelected(row, col)) {
+          cell.classList.add('selected');
+          if (state.selectedPiece) {
+            const pieceEmoji = document.createElement('span');
+            pieceEmoji.className = 'piece-emoji';
+            pieceEmoji.textContent = state.selectedPiece.image;
+            cell.appendChild(pieceEmoji);
+          }
+        }
+
+        // Add target (king) if needed
+        if (isTarget(row, col) && !isSelected(row, col)) {
+          const kingEmoji = document.createElement('span');
+          kingEmoji.className = 'piece-emoji';
+          kingEmoji.textContent = '♚';
+          cell.appendChild(kingEmoji);
+        }
+      });
+    }
+
+    // Helper functions to check cell states
+    function isHighlighted(row, col) {
+      return state.highlightedSquares.some(([r, c]) => r === row && c === col);
+    }
+
+    function isCapture(row, col) {
+      return state.captureSquares.some(([r, c]) => r === row && c === col);
+    }
+
+    function isSelected(row, col) {
+      return state.selectedCell && state.selectedCell[0] === row && state.selectedCell[1] === col;
+    }
+
+    function isTarget(row, col) {
+      return state.targetCell && state.targetCell[0] === row && state.targetCell[1] === col;
+    }
+
+    // Show confetti animation
+    function showConfetti() {
+      const confettiCount = 50;
+      const colors = ['#ef4444', '#3b82f6', '#facc15', '#22c55e', '#8b5cf6'];
+
+      for (let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+
+        const size = Math.random() * 8 + 5;
+        const left = Math.random() * 100;
+        const animationDuration = Math.random() * 2 + 1;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+
+        confetti.style.width = `${size}px`;
+        confetti.style.height = `${size}px`;
+        confetti.style.left = `${left}%`;
+        confetti.style.top = '-10px';
+        confetti.style.backgroundColor = color;
+        confetti.style.animationDuration = `${animationDuration}s`;
+
+        chessboardElement.appendChild(confetti);
+
+        // Remove confetti after animation is complete
+        setTimeout(() => {
+          chessboardElement.removeChild(confetti);
+        }, animationDuration * 1000);
+      }
+    }
+
+    // Event listeners for game mode buttons
+    learnModeButton.addEventListener('click', () => {
+      state.gameMode = 'learn';
+      state.message = `Learning mode: See how the ${state.selectedPiece?.name || 'piece'} moves!`;
+      state.targetCell = null;
+      updateUI();
+    });
+
+    challengeModeButton.addEventListener('click', startChallenge);
+    // Add a sound icon next to the piece descriptions
+function createSoundIcon() {
+  return `
+    <button class="sound-button" aria-label="Read aloud">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+      </svg>
+    </button>
+  `;
+}
+
+// Add CSS for the sound button
+const soundButtonStyles = `
+  .sound-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #4b5563;
+    margin-left: 8px;
+    padding: 4px;
+    border-radius: 9999px;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  
+  .sound-button:hover {
+    background-color: #e5e7eb;
+    color: #1d4ed8;
+  }
+  
+  .sound-button:active {
+    background-color: #d1d5db;
+  }
+  
+  .message-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+  
+  /* Animation for sound icon when playing */
+  @keyframes sound-wave {
+    0% { opacity: 0.3; }
+    50% { opacity: 1; }
+    100% { opacity: 0.3; }
+  }
+  
+  .sound-button.playing svg {
+    animation: sound-wave 1.5s infinite;
+    color: #1d4ed8;
+  }
+`;
+
+// Initialize speech synthesis
+let speechSynthesis = window.speechSynthesis;
+let isSpeaking = false;
+let currentUtterance = null;
+
+// Function to speak text
+function speakText(text) {
+  // Cancel any ongoing speech
+  if (isSpeaking) {
+    speechSynthesis.cancel();
+    isSpeaking = false;
+    document.querySelector('.sound-button').classList.remove('playing');
+  }
+  
+  // Create a new utterance
+  const utterance = new SpeechSynthesisUtterance(text);
+  currentUtterance = utterance;
+  
+  // Set event handlers
+  utterance.onstart = () => {
+    isSpeaking = true;
+    document.querySelector('.sound-button').classList.add('playing');
+  };
+  
+  utterance.onend = () => {
+    isSpeaking = false;
+    document.querySelector('.sound-button').classList.remove('playing');
+  };
+  
+  utterance.onerror = () => {
+    isSpeaking = false;
+    document.querySelector('.sound-button').classList.remove('playing');
+  };
+  
+  // Speak the text
+  speechSynthesis.speak(utterance);
+}
+
+// Handle piece selection with sound integration
+function handlePieceSelect(piece) {
+  state.selectedPiece = piece;
+  state.message = `Great choice! This is the ${piece.name}. ${piece.description}`;
+  state.highlightedSquares = [];
+  state.captureSquares = [];
+  state.selectedCell = null;
+  state.targetCell = null;
+  state.gameMode = 'learn';
+  
+  updateUI();
+}
+
+// Update UI based on state with sound button
+function updateUI() {
+  // Update message
+  const messageContent = state.message;
+  messageElement.innerHTML = ''; // Clear current content
+  
+  // Create container for message and sound button
+  const messageContainer = document.createElement('div');
+  messageContainer.className = 'message-container';
+  
+  // Add the message text
+  const messageText = document.createElement('span');
+  messageText.textContent = messageContent;
+  messageContainer.appendChild(messageText);
+  
+  // Add sound button if there's a selected piece or piece-specific instruction
+  if (state.selectedPiece) {
+    const soundButtonContainer = document.createElement('span');
+    soundButtonContainer.innerHTML = createSoundIcon();
+    messageContainer.appendChild(soundButtonContainer);
+    
+    // Add click event for sound button
+    const soundButton = soundButtonContainer.querySelector('.sound-button');
+    soundButton.addEventListener('click', () => {
+      // Determine what text to speak
+      if (state.gameMode === 'learn') {
+        // In learn mode, speak the piece description
+        speakText(`${state.selectedPiece.name}. ${state.selectedPiece.description}`);
+      } else {
+        // In challenge mode, speak the current instruction
+        speakText(messageContent);
+      }
+    });
+  }
+  
+  messageElement.appendChild(messageContainer);
+  
+  // Update piece selection
+  const pieceButtons = document.querySelectorAll('.piece-button');
+  pieceButtons.forEach(button => {
+    const pieceName = button.querySelector('.piece-name').textContent;
+    if (state.selectedPiece && state.selectedPiece.name === pieceName) {
+      button.classList.add('selected');
+    } else {
+      button.classList.remove('selected');
+    }
+  });
+  
+  // Rest of updateUI function remains the same
+  if (state.gameMode === 'learn') {
+    learnModeButton.classList.add('active');
+    challengeModeButton.classList.remove('active');
+    levelDisplayElement.style.display = 'none';
+  } else {
+    learnModeButton.classList.remove('active');
+    challengeModeButton.classList.add('active');
+    levelDisplayElement.style.display = 'block';
+    levelTextElement.textContent = `Level: ${state.challengeLevel}`;
+    progressFillElement.style.width = `${(state.successCount / 3) * 100}%`;
+  }
+  
+  if (state.selectedPiece && state.selectedPiece.name === 'Pawn' && state.gameMode === 'learn') {
+    pawnLegendElement.style.display = 'flex';
+  } else if (state.selectedPiece && state.selectedPiece.name === 'Pawn' && state.gameMode === 'challenge' && state.challengeLevel === 1) {
+    pawnLegendElement.style.display = 'flex';
+  } else {
+    pawnLegendElement.style.display = 'none';
+  }
+  
+  updateChessboard();
+  
+  if (state.gameMode === 'learn') {
+    gameInstructionsElement.className = 'game-instructions learn-instructions';
+    gameInstructionsElement.textContent = state.selectedPiece 
+      ? "Click on the board to place your piece and see how it moves!" 
+      : "First, choose a chess piece to learn about!";
+  } else {
+    gameInstructionsElement.className = 'game-instructions challenge-instructions';
+    gameInstructionsElement.textContent = state.challengeLevel === 1 
+      ? (state.selectedPiece?.name === 'Pawn' 
+        ? "Green squares show where you can move, red squares show where you can capture. Get the king!" 
+        : "Green squares show where you can move. Capture the king!") 
+      : "Move your piece to capture the king!";
+  }
+}
+
+// Initialize the game with sound support
+function init() {
+  // Add the sound button styles to the document
+  const styleElement = document.createElement('style');
+  styleElement.textContent = soundButtonStyles;
+  document.head.appendChild(styleElement);
+  
+  initPieceSelection();
+  initChessboard();
+  updateUI();
+}
+
+// Initialize the pieces selection with sound
+function initPieceSelection() {
+  pieces.forEach(piece => {
+    const pieceButton = document.createElement('button');
+    pieceButton.className = 'piece-button';
+    pieceButton.innerHTML = `
+      <span class="piece-image">${piece.image}</span>
+      <span class="piece-name">${piece.name}</span>
+    `;
+    pieceButton.addEventListener('click', () => handlePieceSelect(piece));
+    pieceSelectionElement.appendChild(pieceButton);
+  });
+}
+
+// Event listeners for game mode buttons with sound integration
+learnModeButton.addEventListener('click', () => {
+  state.gameMode = 'learn';
+  
+  if (state.selectedCell && state.selectedPiece) {
+    const { normalMoves, captureMoves } = getValidMoves(state.selectedPiece.name, state.selectedCell[0], state.selectedCell[1]);
+    state.highlightedSquares = normalMoves;
+    state.captureSquares = captureMoves;
+  }
+  
+  state.message = `Learning mode: See how the ${state.selectedPiece?.name || 'piece'} moves!`;
+  state.targetCell = null;
+  updateUI();
+});
+
+    // Initialize the game
+    function init() {
+      initPieceSelection();
+      initChessboard();
+      updateUI();
+    }
+
+    // Start the game
+    init();
+  </script>
 </body>
+
 </html>
